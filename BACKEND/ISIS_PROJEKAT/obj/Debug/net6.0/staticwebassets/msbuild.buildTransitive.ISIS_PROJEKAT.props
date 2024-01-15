@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\ISIS_PROJEKAT.props" />
+</Project>

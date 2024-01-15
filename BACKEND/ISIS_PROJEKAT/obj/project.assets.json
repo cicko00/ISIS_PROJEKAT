@@ -3692,11 +3692,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\ISIS\\ISIS_PROJEKAT\\BACKEND\\ISIS_PROJEKAT\\ISIS_PROJEKAT.csproj",
+      "projectUniqueName": "D:\\ISIS\\ISIS_PROJEKAT\\ISIS_PROJEKAT\\BACKEND\\ISIS_PROJEKAT\\ISIS_PROJEKAT.csproj",
       "projectName": "ISIS_PROJEKAT",
-      "projectPath": "D:\\ISIS\\ISIS_PROJEKAT\\BACKEND\\ISIS_PROJEKAT\\ISIS_PROJEKAT.csproj",
+      "projectPath": "D:\\ISIS\\ISIS_PROJEKAT\\ISIS_PROJEKAT\\BACKEND\\ISIS_PROJEKAT\\ISIS_PROJEKAT.csproj",
       "packagesPath": "C:\\Users\\Korisnik\\.nuget\\packages\\",
-      "outputPath": "D:\\ISIS\\ISIS_PROJEKAT\\BACKEND\\ISIS_PROJEKAT\\obj\\",
+      "outputPath": "D:\\ISIS\\ISIS_PROJEKAT\\ISIS_PROJEKAT\\BACKEND\\ISIS_PROJEKAT\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

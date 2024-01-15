@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xFWc3SByud07DiONc4sdrfeB7+2sf8nlCfwLclaKZkKxSFsB9dtNWZzwzsjTiUl0OJdHEu+l7mfDw7jJdadLsQ==",
+  "dgSpecHash": "lrrCr80kKG0fwlvDY4rxsoZJYvivsREwL7Li9eDevHSHKLYKIzLoA2ol5zR4r1QmCpfSKf3QZisobzwHtMz1Eg==",
   "success": true,
-  "projectFilePath": "D:\\ISIS\\ISIS_PROJEKAT\\BACKEND\\ISIS_PROJEKAT\\ISIS_PROJEKAT.csproj",
+  "projectFilePath": "D:\\ISIS\\ISIS_PROJEKAT\\ISIS_PROJEKAT\\BACKEND\\ISIS_PROJEKAT\\ISIS_PROJEKAT.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Korisnik\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\Korisnik\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",

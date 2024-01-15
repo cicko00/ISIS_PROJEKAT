@@ -1,0 +1,41 @@
+<div class="body">
+    <div class="titleSpace">
+        <h1 class="title">PREDICTION AI</h1>
+        <mat-icon class="title_icon">poll</mat-icon>
+    </div>
+    <div>
+        <div class="section1">
+            <input #fileInput type="file" multiple (change)="onFileInput($event)" style="display: none;" />
+
+            <button class="upload_btn" type="button" (click)="fileInput.click()">
+                <span>
+                    <h3>Select data to upload</h3> <mat-icon>create_new_folder</mat-icon>
+                </span>
+            </button>
+            <label class="labels">Files selected: {{files.length}}</label>
+            <button class="upload_btn" (click)="uploadData()">Upload data</button>
+        </div>
+
+        <div class="section2">
+            <div class="sectionDates">
+                <label class="labels1">Select start date</label>
+                <input class="trainingDates" type="date" [(ngModel)]="trainingStartDate" />
+                <label class="labels1">Select end date</label>
+                <input class="trainingDates" type="date" [(ngModel)]="trainingEndDate" />
+            </div>
+
+            <button class="train_btn" (click)="trainWithData()">Train with Data</button>
+
+        </div>
+
+        <div class="section1">
+            <label class="label" for="resultStartDate">Enter result start date:</label>
+            <input class="trainingDates2" type="date" [(ngModel)]="resultStartDate" />
+            <label class="label" for="numberOfDaysInput">Enter number of days to predict:</label>
+            <input class="numInput" type="number" id="numberOfDaysInput" [(ngModel)]="numberOfDays"
+                (input)="onNumberOfDaysChange()" />
+            <button class="resultsBtn" (click)="showResults()">Get Results</button>
+        </div>
+
+
+    </div>

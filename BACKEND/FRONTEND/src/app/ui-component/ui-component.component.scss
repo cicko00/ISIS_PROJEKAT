@@ -1,0 +1,135 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1C1C1C;
+    color: #FFFFFF;
+    
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+}
+
+.file-input {
+    display: none;
+}
+
+input[type="file"],
+input[type="number"] {
+    margin-top: 5px;
+    margin-bottom: 15px;
+    
+    padding: 8px;
+    border: 1px solid #FFFFFF;
+    border-radius: 4px;
+    color: #FFFFFF;
+    background-color: #282828;
+}
+
+button {
+    color: #FFFFFF;
+    background-color: #DAA520;
+    cursor:grab;
+}
+
+button:hover {
+    background-color: #B8860B;
+}
+
+button:disabled {
+    background-color: #5C5C5C;
+    cursor: not-allowed;
+}
+
+.title{
+    color: gold;
+    font-family: cursive;
+    font-size: 4em;
+}
+.title_icon{
+    color: #DAA520;
+    height: 50px;
+    margin-top: 20px;
+    transform: scale(2);
+}
+.titleSpace{
+    margin-top: 30px;
+    align-self: center;
+    align-content: center;
+    text-align: center;
+    border-bottom: #FFFFFF 3px;
+    border-style:solid;
+    
+}
+.body{
+    position: fixed;
+  top: 0;
+  left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+}
+
+.upload_btn{
+    margin-top: 20px;
+    margin-left: 40%;
+    height: 100px;
+    width: 300px;
+}
+
+.train_btn{
+    margin-top: 20px;
+    margin-left: 100px;
+    height: 100px;
+    width: 300px;
+}
+.labels{
+    text-align: center;
+    color: #FFFFFF;
+}
+
+.labels1{
+    text-align: center;
+    color: #FFFFFF;
+    margin-left: 500px;
+}
+
+.section1{
+    border-bottom: #FFFFFF 3px;
+    border-style:solid;
+    
+}
+
+
+
+.numInput{
+    width: 100px;
+    margin-left: 620px;
+}
+
+.trainingDates2{
+    margin-left: 630px;
+}
+
+.label{
+    color: white;
+    margin-left:  630px; ;
+}
+
+.resultsBtn{
+    margin-left: 30px;
+    height: 50px;
+    width: 100px;
+}
+
+.trainingDates{
+    margin-left: 500px;
+}
+
+.section2{
+    display:flex;
+    align-items: center;
+    border-bottom: #FFFFFF 3px;
+    border-style:solid;
+    
+}

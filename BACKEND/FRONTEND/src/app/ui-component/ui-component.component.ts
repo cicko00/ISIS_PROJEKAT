@@ -32,6 +32,9 @@ export class UiComponentComponent {
     }
   }
 
+  onFileInputTrain(event: any){
+    
+  }
 
 
   trainWithData(): void {

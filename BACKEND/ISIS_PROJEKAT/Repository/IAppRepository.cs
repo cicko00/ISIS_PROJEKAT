@@ -11,6 +11,12 @@ namespace ISIS_PROJEKAT.Repository
         public LoadDataHistory? FindEntity(DateTime dateTime, string ptid);
         public void ClearLoadData();
         public void SaveResult();
+        public void SaveWheatherForecast(List<WheatherForecast> wheatherForecastList);
+        public List<WheatherForecast> GetWheatherForecast();
+
+        public void ClearForcastData();
+
+
 
     }
 }

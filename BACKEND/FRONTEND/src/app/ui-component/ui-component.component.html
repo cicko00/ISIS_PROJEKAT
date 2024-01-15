@@ -29,6 +29,13 @@
         </div>
 
         <div class="section1">
+            <input #fileInputTrain type="file" multiple (change)="onFileInputTrain($event)" style="display: none;" />
+
+            <button class="upload_btn" type="button" (click)="fileInputTrain.click()">
+                <span>
+                    <h3>SelectTrainingFile</h3> <mat-icon>create_new_folder</mat-icon>
+                </span>
+            </button>
             <label class="label" for="resultStartDate">Enter result start date:</label>
             <input class="trainingDates2" type="date" [(ngModel)]="resultStartDate" />
             <label class="label" for="numberOfDaysInput">Enter number of days to predict:</label>

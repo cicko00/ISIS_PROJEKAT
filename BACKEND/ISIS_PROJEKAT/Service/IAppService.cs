@@ -5,5 +5,7 @@
         void ReciveData(IFormFile[] File);
 
         object GetResult(int NoOfDays);
+
+        
     }
 }

@@ -25,7 +25,9 @@ namespace ISIS_PROJEKAT.Service
         public void ReciveData(IFormFile[] Files)
         {
             List<LoadDataHistory> loadData = new List<LoadDataHistory>();
+            List<WheatherForecast> wheatherForecastData = new List<WheatherForecast>();
             loadData = _repository.GetAllLoadData();
+            wheatherForecastData = _repository.GetWheatherForecast();
             List<string[]> DataSetsList = new List<string[]>();
             CultureInfo culture = CultureInfo.InvariantCulture;
 
@@ -72,6 +74,7 @@ namespace ISIS_PROJEKAT.Service
                             continue;
                         }
                         LoadDataHistory newInstance = new LoadDataHistory();
+                        
                         
                         List<string> datetimeSplits = fields[0].Split("/").ToList();
                         string datetime = datetimeSplits[1]+"/" + datetimeSplits[0] + "/" + datetimeSplits[2];
@@ -171,7 +174,8 @@ namespace ISIS_PROJEKAT.Service
             {
                 string[] fields = DataSetsList[i];
                 LoadDataHistory newInstance = new LoadDataHistory();
-                DateTime dateTime =DateTime.Parse(fields[1]);
+                WheatherForecast WFInstance = new WheatherForecast();
+                DateTime dateTime = DateTime.Parse(fields[1]);
 
                 double.TryParse(fields[2], NumberStyles.Any, culture, out var tempres);
                 if (tempres == null)
@@ -188,16 +192,12 @@ namespace ISIS_PROJEKAT.Service
 
                         }
 
-
-
-
-
                     }
                 }
 
                 if (tempres == null)
                 {
-                    for (int j = 24; j < 400; j=j+24)
+                    for (int j = 24; j < 400; j = j + 24)
                     {
                         if (DataSetsList.Count > (i + j) && (i - j) > 0)
                         {
@@ -210,9 +210,17 @@ namespace ISIS_PROJEKAT.Service
                         }
                     }
                 }
-                if(tempres == null)
+                if (tempres == null)
                 {
-                    tempres = 0;
+                    for (int j = 0; j < 100; j = j + 24)
+                    {
+                        if (DataSetsList.Count > (i + j)) {
+                            if (double.TryParse(DataSetsList[i + j][2], NumberStyles.Any, culture, out var tempRes1))
+                            {
+                                tempres = tempRes1;
+                            }
+                        }
+                    }
                 }
 
                 ///////////////////////////////////////////////////////////////
@@ -250,7 +258,17 @@ namespace ISIS_PROJEKAT.Service
                 }
                 if (feelslike == null)
                 {
-                    tempres = 0;
+                    for (int j = 0; j < 100; j = j + 24)
+                    {
+                        if (DataSetsList.Count > (i + j))
+                        {
+                            if (double.TryParse(DataSetsList[i + j][3], NumberStyles.Any, culture, out var tempRes1))
+                            {
+                                feelslike = tempRes1;
+                                break;
+                            }
+                        }
+                    }
                 }
                 //////////////////////////////////////////////////
                 double.TryParse(fields[4], NumberStyles.Any, culture, out var dew);
@@ -287,7 +305,17 @@ namespace ISIS_PROJEKAT.Service
                 }
                 if (dew == null)
                 {
-                    dew = 0;
+                    for (int j = 0; j < 100; j = j + 24)
+                    {
+                        if (DataSetsList.Count > (i + j))
+                        {
+                            if (double.TryParse(DataSetsList[i + j][4], NumberStyles.Any, culture, out var tempRes1))
+                            {
+                                dew = tempRes1;
+                                break;
+                            }
+                        }
+                    }
                 }
 
                 //////////////////////////////////////////////
@@ -325,7 +353,17 @@ namespace ISIS_PROJEKAT.Service
                 }
                 if (humidity == null)
                 {
-                    humidity = 0;
+                    for (int j = 0; j < 100; j = j + 24)
+                    {
+                        if (DataSetsList.Count > (i + j))
+                        {
+                            if (double.TryParse(DataSetsList[i + j][6], NumberStyles.Any, culture, out var tempRes1))
+                            {
+                                humidity = tempRes1;
+                                break;
+                            }
+                        }
+                    }
                 }
                 ///////////////////////////////////////////
                 double.TryParse(fields[6], NumberStyles.Any, culture, out var precip);
@@ -362,7 +400,17 @@ namespace ISIS_PROJEKAT.Service
                 }
                 if (precip == null)
                 {
-                    precip = 0;
+                    for (int j = 0; j < 100; j = j + 24)
+                    {
+                        if (DataSetsList.Count > (i + j))
+                        {
+                            if (double.TryParse(DataSetsList[i + j][6], NumberStyles.Any, culture, out var tempRes1))
+                            {
+                                precip = tempRes1;
+                                break;
+                            }
+                        }
+                    }
                 }
                 //////////////////////////////////////////
                 double.TryParse(fields[9], NumberStyles.Any, culture, out var snow);
@@ -399,7 +447,17 @@ namespace ISIS_PROJEKAT.Service
                 }
                 if (snow == null)
                 {
-                    snow = 0;
+                    for (int j = 0; j < 100; j = j + 24)
+                    {
+                        if (DataSetsList.Count > (i + j))
+                        {
+                            if (double.TryParse(DataSetsList[i + j][9], NumberStyles.Any, culture, out var tempRes1))
+                            {
+                                snow = tempRes1;
+                                break;
+                            }
+                        }
+                    }
                 }
                 //////////////////////////////////////
                 double.TryParse(fields[10], NumberStyles.Any, culture, out var snowdepth);
@@ -436,7 +494,17 @@ namespace ISIS_PROJEKAT.Service
                 }
                 if (snowdepth == null)
                 {
-                    snowdepth = 0;
+                    for (int j = 0; j < 100; j = j + 24)
+                    {
+                        if (DataSetsList.Count > (i + j))
+                        {
+                            if (double.TryParse(DataSetsList[i + j][10], NumberStyles.Any, culture, out var tempRes1))
+                            {
+                                snowdepth = tempRes1;
+                                break;
+                            }
+                        }
+                    }
                 }
                 //////////////////////////////
                 double.TryParse(fields[11], NumberStyles.Any, culture, out var windgust);
@@ -473,7 +541,17 @@ namespace ISIS_PROJEKAT.Service
                 }
                 if (windgust == null)
                 {
-                    tempres = 0;
+                    for (int j = 0; j < 100; j = j + 24)
+                    {
+                        if (DataSetsList.Count > (i + j))
+                        {
+                            if (double.TryParse(DataSetsList[i + j][11], NumberStyles.Any, culture, out var tempRes1))
+                            {
+                                windgust = tempRes1;
+                                break;
+                            }
+                        }
+                    }
                 }
                 ///////////////////////////
                 double.TryParse(fields[12], NumberStyles.Any, culture, out var windspeed);
@@ -505,6 +583,21 @@ namespace ISIS_PROJEKAT.Service
                                 break;
                             }
 
+                        }
+                    }
+                }
+
+                if (windspeed == null)
+                {
+                    for (int j = 0; j < 100; j = j + 24)
+                    {
+                        if (DataSetsList.Count > (i + j))
+                        {
+                            if (double.TryParse(DataSetsList[i + j][12], NumberStyles.Any, culture, out var tempRes1))
+                            {
+                                windspeed = tempRes1;
+                                break;
+                            }
                         }
                     }
                 }
@@ -543,6 +636,21 @@ namespace ISIS_PROJEKAT.Service
                     }
                 }
 
+                if (winddir == null)
+                {
+                    for (int j = 0; j < 100; j = j + 24)
+                    {
+                        if (DataSetsList.Count > (i + j))
+                        {
+                            if (double.TryParse(DataSetsList[i + j][13], NumberStyles.Any, culture, out var tempRes1))
+                            {
+                                winddir = tempRes1;
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 ///////////////////////
                 double.TryParse(fields[14], NumberStyles.Any, culture, out var sealevelpressure);
                 if (sealevelpressure == null)
@@ -573,6 +681,21 @@ namespace ISIS_PROJEKAT.Service
                                 break;
                             }
 
+                        }
+                    }
+                }
+
+                if (sealevelpressure == null)
+                {
+                    for (int j = 0; j < 100; j = j + 24)
+                    {
+                        if (DataSetsList.Count > (i + j))
+                        {
+                            if (double.TryParse(DataSetsList[i + j][14], NumberStyles.Any, culture, out var tempRes1))
+                            {
+                                sealevelpressure = tempRes1;
+                                break;
+                            }
                         }
                     }
                 }
@@ -611,6 +734,21 @@ namespace ISIS_PROJEKAT.Service
                     }
                 }
 
+                if (cloudcover == null)
+                {
+                    for (int j = 0; j < 100; j = j + 24)
+                    {
+                        if (DataSetsList.Count > (i + j))
+                        {
+                            if (double.TryParse(DataSetsList[i + j][15], NumberStyles.Any, culture, out var tempRes1))
+                            {
+                                cloudcover = tempRes1;
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 ///////////////////////////////////
                 double.TryParse(fields[16], NumberStyles.Any, culture, out var visibility);
                 if (visibility == null)
@@ -641,6 +779,21 @@ namespace ISIS_PROJEKAT.Service
                                 break;
                             }
 
+                        }
+                    }
+                }
+
+                if (visibility == null)
+                {
+                    for (int j = 0; j < 100; j = j + 24)
+                    {
+                        if (DataSetsList.Count > (i + j))
+                        {
+                            if (double.TryParse(DataSetsList[i + j][16], NumberStyles.Any, culture, out var tempRes1))
+                            {
+                                visibility = tempRes1;
+                                break;
+                            }
                         }
                     }
                 }
@@ -679,8 +832,23 @@ namespace ISIS_PROJEKAT.Service
                     }
                 }
 
+                if (uvindex == null)
+                {
+                    for (int j = 0; j < 100; j = j + 24)
+                    {
+                        if (DataSetsList.Count > (i + j))
+                        {
+                            if (double.TryParse(DataSetsList[i + j][19], NumberStyles.Any, culture, out var tempRes1))
+                            {
+                                uvindex = tempRes1;
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 /////////////////////////////////
-                string conditions = fields[21].Replace("\"","");
+                string conditions = fields[21].Replace("\"", "");
 
 
                 LoadDataHistory ld = new LoadDataHistory();
@@ -702,42 +870,76 @@ namespace ISIS_PROJEKAT.Service
                 ld.Conditions = conditions;
 
 
-                int cnt =0;
+                int cnt = 0;
                 foreach (LoadDataHistory loaddata in loadData.Where(x => (x.DateTime.Day == dateTime.Day && x.DateTime.Hour == dateTime.Hour && x.DateTime.Month == dateTime.Month && x.DateTime.Year == dateTime.Year)))
                 {
                     cnt++;
                     loaddata.Temperature = tempres;
                     loaddata.FeelsLike = feelslike;
                     loaddata.Dew = dew;
-                    loaddata.Humidity= humidity;
+                    loaddata.Humidity = humidity;
                     loaddata.Precip = precip;
-                    loaddata.Snow= snow;
+                    loaddata.Snow = snow;
                     loaddata.SnowDepth = snowdepth;
-                    loaddata.WindGust= windgust;
-                    loaddata.WindSpeed= windspeed;
+                    loaddata.WindGust = windgust;
+                    loaddata.WindSpeed = windspeed;
                     loaddata.WindDir = winddir;
-                    loaddata.SeaLevelPressure= sealevelpressure;
-                    loaddata.CloudCover= cloudcover;
+                    loaddata.SeaLevelPressure = sealevelpressure;
+                    loaddata.CloudCover = cloudcover;
                     loaddata.Visibilty = visibility;
-                    loaddata.UVIndex= uvindex;
-                    loaddata.Conditions= conditions;
+                    loaddata.UVIndex = uvindex;
+                    loaddata.Conditions = conditions;
                 }
-                //if (cnt < 66)
-                //{
-                //    for(int ii=0; ii<(66 - cnt); ii++)
-                //    {
-                //        LoadDataHistory instance = new LoadDataHistory();
-                //        Guid tmp = instance.Id;
-                //        instance = ld;
-                //        instance.Id = tmp;
-                //        loadData.Add(instance);
-                //    }
-                //}
+
+                WheatherForecast wf = wheatherForecastData.FirstOrDefault(x => x.DateTime == ld.DateTime);
+
+                if (wf != null)
+                {
+                    wf.CloudCover = cloudcover;
+                    wf.WindDir = winddir;
+                    wf.WindGust = windgust;
+                    wf.WindSpeed = windspeed;
+                    wf.SeaLevelPressure = sealevelpressure;
+                    wf.Snow = snow;
+                    wf.SnowDepth = snowdepth;
+                    wf.Dew = dew;
+                    wf.Humidity = humidity;
+                    wf.Precip = precip;
+                    wf.Visibilty = visibility;
+                    wf.UVIndex = uvindex;
+                    wf.Conditions = conditions;
+                    wf.FeelsLike = feelslike;
+                    wf.Temperature = tempres;
+                }
+                else
+                {
+                    wf = new WheatherForecast();
+                    wf.CloudCover = cloudcover;
+                    wf.WindDir = winddir;
+                    wf.WindGust = windgust;
+                    wf.WindSpeed = windspeed;
+                    wf.SeaLevelPressure = sealevelpressure;
+                    wf.Snow = snow;
+                    wf.SnowDepth = snowdepth;
+                    wf.Dew = dew;
+                    wf.Humidity = humidity;
+                    wf.Precip = precip;
+                    wf.Visibilty = visibility;
+                    wf.UVIndex = uvindex;
+                    wf.Conditions = conditions;
+                    wf.FeelsLike = feelslike;
+                    wf.Temperature = tempres;
+                    wf.DateTime = dateTime;
+                    wheatherForecastData.Add(wf);
+                }
+                
                 
             }
 
                 _repository.ClearLoadData();
             _repository.SaveLoadDataToDatabase(loadData);
+            _repository.ClearForcastData();
+            _repository.SaveWheatherForecast(wheatherForecastData);
            
         }
 

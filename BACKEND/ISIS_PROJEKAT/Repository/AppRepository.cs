@@ -37,5 +37,22 @@ namespace ISIS_PROJEKAT.Repository
         {
             _context.SaveChanges();
         }
+
+        public void SaveWheatherForecast(List<WheatherForecast>wheatherForecastList)
+        {
+            _context.WheatherForecasts.AddRange(wheatherForecastList);
+            _context.SaveChanges();
+        }
+
+        public List<WheatherForecast> GetWheatherForecast()
+        {
+            return _context.WheatherForecasts.ToList();
+        }
+
+        public void ClearForcastData()
+        {
+            _context.WheatherForecasts.RemoveRange(_context.WheatherForecasts);
+            _context.SaveChanges();
+        }
     }
 }

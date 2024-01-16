@@ -50,7 +50,7 @@ export class UiComponentComponent {
 
     this.httpClient.get('https://localhost:7058/TrainWithData',{ params: params}).
       subscribe(response => {
-        
+        alert("Model is trained successfuly!");
         console.log("Success");
       });
   }
@@ -58,6 +58,14 @@ export class UiComponentComponent {
 
 showResults(): void {
 
+  if(this.numberOfDays > 7 ){
+    alert("Max number of days is 7");
+    return;
+  }
+  if(this.numberOfDays < 1 ){
+    alert("Min number of days is 1");
+    return;
+  }
   const params = new HttpParams()
     .append('startDate', new Date(this.resultStartDate).toISOString())
     .append('noOfDays', this.numberOfDays.toString());
@@ -80,11 +88,15 @@ showResults(): void {
 }
 
 onNumberOfDaysChange(): void {
-  // Handle changes to the 'numberOfDays' input here if needed
+ 
 }
 
 
 uploadData(): void {
+  if(this.files.length<1){
+    alert("You must select at least one file!");
+    return;
+  }
   if(this.files) {
 
   const formData = new FormData();
@@ -96,7 +108,10 @@ uploadData(): void {
 
   const upload$ = this.httpClient.post("https://localhost:7058/UploadData", formData);
 
-  upload$.subscribe();
+  upload$.subscribe(response => {
+    alert("Model is trained successfuly!");
+    console.log("File successfuly uploaded");
+  });
 }
   }
 

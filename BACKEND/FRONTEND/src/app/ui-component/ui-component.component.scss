@@ -2,8 +2,8 @@ body {
     font-family: Arial, sans-serif;
     background-color: #1C1C1C;
     color: #FFFFFF;
-    height: 2000px;
-    
+    height: 100%;
+    max-height: 10000px;
 }
 
 label {
@@ -98,7 +98,9 @@ button:disabled {
 .section1{
     border-bottom: #FFFFFF 3px;
     border-style:solid;
-    
+    bottom: 5px;
+  overflow: auto;
+  height: 100%;
 }
 
 
@@ -121,6 +123,7 @@ button:disabled {
     margin-left: 30px;
     height: 50px;
     width: 100px;
+    margin-bottom: 100px;
 }
 
 .trainingDates{
@@ -133,4 +136,9 @@ button:disabled {
     border-bottom: #FFFFFF 3px;
     border-style:solid;
     
+}
+
+.body{
+    height: 100%;
+    overflow: scroll;
 }

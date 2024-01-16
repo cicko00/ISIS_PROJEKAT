@@ -21,6 +21,14 @@ namespace ISIS_PROJEKAT.Controllers
             return Ok();
         }
 
+        [HttpGet("TrainWithData")]
+        public IActionResult TrainWithData([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+           
+            return Ok(_appService.TrainWithData(startDate, endDate));
+        }
+
+
         [HttpGet("GetResult")]
         public IActionResult GetResult([FromQuery]int NoOfDays)
         {

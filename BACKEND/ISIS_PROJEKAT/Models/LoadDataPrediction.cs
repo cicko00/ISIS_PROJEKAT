@@ -16,6 +16,6 @@ namespace ISIS_PROJEKAT.Models
         public string District { get; set; }
 
         [Required]
-        public double Load { get; set; }
+        public float Load { get; set; }
     }
 }

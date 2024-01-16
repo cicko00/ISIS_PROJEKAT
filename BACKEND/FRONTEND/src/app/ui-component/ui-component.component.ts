@@ -3,10 +3,11 @@ import { FormsModule } from '@angular/forms'; // Import FormsModule
 import { HttpClient } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-ui-component',
   standalone: true,
-  imports: [FormsModule, HttpClientModule, MatIconModule],
+  imports: [FormsModule, HttpClientModule, MatIconModule, CommonModule],
   templateUrl: './ui-component.component.html',
   styleUrl: './ui-component.component.scss'
 })
@@ -18,6 +19,9 @@ export class UiComponentComponent {
   numberOfDays: number | null = null;
   fileName = '';
   files: File[] = []
+
+  trainingFile!: File;
+
   trainingStartDate!:Date;
   trainingEndDate!:Date;
   resultStartDate!:Date;
@@ -33,13 +37,13 @@ export class UiComponentComponent {
   }
 
   onFileInputTrain(event: any){
-    
+      this.trainingFile= event.target.files[0];
   }
 
 
   trainWithData(): void {
     // Assuming your C# endpoint for training is 'your-csharp-backend-url/train'
-    this.httpClient.get(`your-csharp-backend-url/train?startDate=${this.trainingStartDate}&endDate=${this.trainingEndDate}&`).subscribe(
+    this.httpClient.get(`https://localhost:7058/?startDate=${this.trainingStartDate}&endDate=${this.trainingEndDate}&`).subscribe(
       (response: any) => {
         console.log('Training successful', response);
       },

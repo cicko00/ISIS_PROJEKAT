@@ -36,6 +36,7 @@
                     <h3>SelectTrainingFile</h3> <mat-icon>create_new_folder</mat-icon>
                 </span>
             </button>
+            <label *ngIf="trainingFile" class="labels">Training file selected!</label>
             <label class="label" for="resultStartDate">Enter result start date:</label>
             <input class="trainingDates2" type="date" [(ngModel)]="resultStartDate" />
             <label class="label" for="numberOfDaysInput">Enter number of days to predict:</label>

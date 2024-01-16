@@ -6,6 +6,6 @@
 
         object GetResult(int NoOfDays);
 
-        
+        byte[] TrainWithData(DateTime startDate, DateTime endDate);
     }
 }

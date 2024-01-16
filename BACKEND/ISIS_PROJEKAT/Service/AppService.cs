@@ -1,7 +1,10 @@
-﻿using ISIS_PROJEKAT.Models;
+﻿using ISIS_PROJEKAT.DTOs;
+using ISIS_PROJEKAT.Models;
 using ISIS_PROJEKAT.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
+using Microsoft.ML;
 using Microsoft.SqlServer.Server;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.FileIO;
@@ -943,9 +946,85 @@ namespace ISIS_PROJEKAT.Service
            
         }
 
+        bool IsWeekend(DateTime datetime)
+        {
+            if(datetime.DayOfWeek== DayOfWeek.Sunday || datetime.DayOfWeek == DayOfWeek.Saturday || datetime.DayOfWeek == DayOfWeek.Friday)
+            { 
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public byte[] TrainWithData(DateTime startDate, DateTime endDate)
+        {
+
+
+            List<LoadDataHistory> historicalData = _repository.GetAllLoadData().FindAll(x=>(x.DateTime >= startDate && x.DateTime<= endDate));
+            List<WheatherForecast> forecasts= _repository.GetWheatherForecast().FindAll(x=>(x.DateTime >=endDate && x.DateTime<= endDate.AddDays(7)));
+            var context = new MLContext();
+
+            List<LoadDataDTO> historicalDataDTO= historicalData.Select(x => new LoadDataDTO
+            {
+                DateTime= x.DateTime,
+                Load= (float)x.Load,
+                isWeekend = x.isWeekend,
+                Temperature= (float)x.Temperature,
+                FeelsLike = (float)x.FeelsLike,
+                Dew = (float)x.Dew,
+                Humidity = (float)x.Humidity,
+                Precip = (float)x.Precip,
+                Snow = (float)x.Snow,
+                SnowDepth = (float)x.SnowDepth
+            }).ToList();
+
+            List<FutureForecastDTO> futureForecasts = forecasts.Select(x=> new FutureForecastDTO
+            {
+                DateTime= x.DateTime,
+                isWeekend = IsWeekend(x.DateTime),
+                Temperature= (float)x.Temperature,
+                FeelsLike = (float)x.FeelsLike,
+                Dew = (float)x.Dew,
+                Humidity= (float)x.Humidity,
+                Precip = (float)x.Precip,
+                Snow = (float)x.Snow,
+                SnowDepth = (float)x.SnowDepth
+
+            }).ToList();
+
+            IDataView data = context.Data.LoadFromEnumerable<LoadDataDTO>(historicalDataDTO);
+            var pipeline = context.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: "Load")
+            .Append(context.Transforms.Categorical.OneHotEncoding(outputColumnName: "HumidityTmp", inputColumnName: "Humidity"))
+            .Append(context.Transforms.Categorical.OneHotEncoding(outputColumnName: "TemperatureTmp", inputColumnName: "Temperature"))
+            .Append(context.Transforms.Categorical.OneHotEncoding(outputColumnName: "FeelsLikeTmp", inputColumnName: "FeelsLike"))
+            .Append(context.Transforms.Categorical.OneHotEncoding(outputColumnName: "DewTmp", inputColumnName: "Dew"))
+            .Append(context.Transforms.Categorical.OneHotEncoding(outputColumnName: "PrecipTmp", inputColumnName: "Precip"))
+            .Append(context.Transforms.Categorical.OneHotEncoding(outputColumnName: "SnowTmp", inputColumnName: "Snow"))
+            .Append(context.Transforms.Categorical.OneHotEncoding(outputColumnName: "SnowDepthTmp", inputColumnName: "SnowDepth"))
+            .Append(context.Transforms.Concatenate("Features", "TemperatureTmp", "HumidityTmp","FeelsLikeTmp","DewTmp","PrecipTmp","SnowTmp", "SnowDepthTmp")
+            .Append(context.Regression.Trainers.LbfgsPoissonRegression()));
+
+            // Train the model
+            var model = pipeline.Fit(data);
+
+            var futureData = context.Data.LoadFromEnumerable<FutureForecastDTO>(futureForecasts);
+            var predictions = model.Transform(futureData);
+            var results = context.Data.CreateEnumerable<LoadPrediction>(predictions, reuseRowObject: false);
+
+            var predictedLoad = results.Select(x => new ResultClassDTO
+            {
+                DateTime = x.DateTime,
+                City = "NEW YORK",
+                District = "N.Y.C.",
+                Load = x.Load
+            }).ToList();
+
+            return null;
+        }
 
 
 
-       
     }
 }

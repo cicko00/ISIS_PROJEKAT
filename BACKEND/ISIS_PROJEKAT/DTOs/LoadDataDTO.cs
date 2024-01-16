@@ -4,7 +4,7 @@
     {
         public DateTime DateTime { get; set; }
 
-        public Single Load { get; set; }
+        public float Load { get; set; }
 
         public bool isWeekend { get; set; } = false;
 

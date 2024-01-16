@@ -54,5 +54,17 @@ namespace ISIS_PROJEKAT.Repository
             _context.WheatherForecasts.RemoveRange(_context.WheatherForecasts);
             _context.SaveChanges();
         }
+
+        public void DeleteDataPrediction()
+        {
+            _context.LoadDatasPrediction.RemoveRange(_context.LoadDatasPrediction);
+            _context.SaveChanges();
+        }
+
+        public void SaveLoadDataPredictions(List<LoadDataPrediction> l)
+        {
+            _context.LoadDatasPrediction.AddRange(l);
+            _context.SaveChanges();
+        }
     }
 }

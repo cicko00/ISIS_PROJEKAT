@@ -7,6 +7,13 @@ using Microsoft.Extensions.Configuration;
 var builder = WebApplication.CreateBuilder(args);
 
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowOrigin",
+        builder => builder.WithOrigins("http://localhost:4200") // Add the origin of your Angular app
+                           .AllowAnyHeader()
+                           .AllowAnyMethod());
+});
 
 builder.Services.AddControllers();
 
@@ -31,5 +38,13 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseCors("AllowOrigin");
 
+app.Use(async (context, next) =>
+{
+    // Add your custom headers here
+    context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
+    await next.Invoke();
+});
 app.Run();

@@ -5,11 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using Microsoft.ML;
+using Microsoft.ML.Data;
+using Microsoft.ML.Trainers;
 using Microsoft.SqlServer.Server;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.FileIO;
+using Newtonsoft.Json;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace ISIS_PROJEKAT.Service
 {
@@ -19,10 +23,64 @@ namespace ISIS_PROJEKAT.Service
         public AppService(IAppRepository appRepository) 
         { 
             _repository = appRepository;
-        } 
-        public object GetResult(int NoOfDays)
+        }
+
+       
+
+         
+        public string GetResult(int NoOfDays, DateTime startdate)
         {
-            throw new NotImplementedException();
+           
+           
+            var context = new MLContext();
+            DataViewSchema modelSchema;
+            ITransformer trainedModel = context.Model.Load("D://iiii//PredModel.zip", out modelSchema);
+            //File.Delete("TmpSaveModel.zip");
+           
+
+            List<WheatherForecast> forecasts = _repository.GetWheatherForecast().FindAll(x => (x.DateTime >= startdate && x.DateTime <= startdate.AddDays(NoOfDays)));
+            List<FutureForecastDTO> futureForecasts = forecasts.Select(x => new FutureForecastDTO
+            {
+                DateTime = x.DateTime,
+                isWeekend = IsWeekend(x.DateTime),
+                Temperature = (float)x.Temperature,
+                FeelsLike = (float)x.FeelsLike,
+                Dew = (float)x.Dew,
+                Humidity = (float)x.Humidity,
+                Precip = (float)x.Precip,
+                Snow = (float)x.Snow,
+                SnowDepth = (float)x.SnowDepth
+
+            }).ToList();
+
+            var futureData = context.Data.LoadFromEnumerable<FutureForecastDTO>(futureForecasts);
+            var predictions = trainedModel.Transform(futureData);
+            var results = context.Data.CreateEnumerable<LoadPrediction>(predictions, reuseRowObject: false);
+
+            
+            List<LoadDataPrediction> loadDataPrediction = results.Select(x => new LoadDataPrediction
+            {
+                DateTime = x.DateTime,
+                City = "NEW YORK",
+                District ="N.Y.C.",
+                Load= x.Load
+            }).ToList();
+
+            
+            _repository.SaveLoadDataPredictions(loadDataPrediction);
+
+            string filestring = "DateTime, City, District, Load";
+            
+            foreach(var predictionRowData in loadDataPrediction)
+            {
+                filestring += (Environment.NewLine +predictionRowData.DateTime.ToString()+ ","+ predictionRowData.City.ToString()
+                    +","+ predictionRowData.District.ToString()+"," + predictionRowData.Load.ToString());
+                
+            }
+
+            File.WriteAllText("D://iiii//directDownload.csv",filestring);
+             return filestring;
+
         }
 
         public void ReciveData(IFormFile[] Files)
@@ -958,12 +1016,10 @@ namespace ISIS_PROJEKAT.Service
             }
         }
 
-        public byte[] TrainWithData(DateTime startDate, DateTime endDate)
+        public bool TrainWithData(DateTime startDate, DateTime endDate)
         {
-
-
             List<LoadDataHistory> historicalData = _repository.GetAllLoadData().FindAll(x=>(x.DateTime >= startDate && x.DateTime<= endDate));
-            List<WheatherForecast> forecasts= _repository.GetWheatherForecast().FindAll(x=>(x.DateTime >=endDate && x.DateTime<= endDate.AddDays(7)));
+           
             var context = new MLContext();
 
             List<LoadDataDTO> historicalDataDTO= historicalData.Select(x => new LoadDataDTO
@@ -980,19 +1036,7 @@ namespace ISIS_PROJEKAT.Service
                 SnowDepth = (float)x.SnowDepth
             }).ToList();
 
-            List<FutureForecastDTO> futureForecasts = forecasts.Select(x=> new FutureForecastDTO
-            {
-                DateTime= x.DateTime,
-                isWeekend = IsWeekend(x.DateTime),
-                Temperature= (float)x.Temperature,
-                FeelsLike = (float)x.FeelsLike,
-                Dew = (float)x.Dew,
-                Humidity= (float)x.Humidity,
-                Precip = (float)x.Precip,
-                Snow = (float)x.Snow,
-                SnowDepth = (float)x.SnowDepth
-
-            }).ToList();
+            
 
             IDataView data = context.Data.LoadFromEnumerable<LoadDataDTO>(historicalDataDTO);
             var pipeline = context.Transforms.CopyColumns(outputColumnName: "Label", inputColumnName: "Load")
@@ -1009,19 +1053,14 @@ namespace ISIS_PROJEKAT.Service
             // Train the model
             var model = pipeline.Fit(data);
 
-            var futureData = context.Data.LoadFromEnumerable<FutureForecastDTO>(futureForecasts);
-            var predictions = model.Transform(futureData);
-            var results = context.Data.CreateEnumerable<LoadPrediction>(predictions, reuseRowObject: false);
+            if (File.Exists("D://iiii//PredModel.zip"))
+                File.Delete("D://iiii//PredModel.zip");
 
-            var predictedLoad = results.Select(x => new ResultClassDTO
-            {
-                DateTime = x.DateTime,
-                City = "NEW YORK",
-                District = "N.Y.C.",
-                Load = x.Load
-            }).ToList();
+            context.Model.Save(model,data.Schema, "D://iiii//PredModel.zip");
+            return true;
 
-            return null;
+
+            //return null;
         }
 
 

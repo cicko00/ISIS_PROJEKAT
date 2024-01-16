@@ -4,8 +4,8 @@
     {
         void ReciveData(IFormFile[] File);
 
-        object GetResult(int NoOfDays);
+        string GetResult(int NoOfDays, DateTime startdate);
 
-        byte[] TrainWithData(DateTime startDate, DateTime endDate);
+        bool TrainWithData(DateTime startDate, DateTime endDate);
     }
 }

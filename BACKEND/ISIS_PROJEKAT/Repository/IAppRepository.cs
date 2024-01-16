@@ -16,6 +16,10 @@ namespace ISIS_PROJEKAT.Repository
 
         public void ClearForcastData();
 
+        public void DeleteDataPrediction();
+
+        public void SaveLoadDataPredictions(List<LoadDataPrediction>l);
+
 
 
     }
